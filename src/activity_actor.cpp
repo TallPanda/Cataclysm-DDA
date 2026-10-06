@@ -13674,14 +13674,15 @@ void butchery_activity_actor::do_turn( player_activity &act, Character &you )
 
     butchery_data *this_bd = &bd.back();
 
-    if( this_bd->progress == 0_seconds ) {
-        if( !initiate_butchery( act, you, *this_bd ) ) {
-            bd.pop_back();
-            if( bd.empty() ) {
-                act.moves_left = 0;
-                return;
-            }
+    while( this_bd->progress == 0_seconds && !initiate_butchery( act, you, *this_bd ) ) {
+        bd.pop_back();
+        if( bd.empty() ) {
+            act.moves_left = 0;
+            return;
         }
+        // this_bd pointed at the element we just erased; re-fetch it from the
+        // (now shorter) vector instead of dereferencing the dangling pointer.
+        this_bd = &bd.back();
     }
 
     const item_location &target = this_bd->corpse;
