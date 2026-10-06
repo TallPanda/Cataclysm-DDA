@@ -492,10 +492,8 @@ void game::handle_progress_ui()
     }
     if( wait_redraw ) {
         if( first_redraw_since_waiting_started ||
-            calendar::once_every( std::min( 1_minutes, wait_refresh_rate ) ) ) {
-            if( first_redraw_since_waiting_started || calendar::once_every( wait_refresh_rate ) ) {
-                ui_manager::redraw();
-            }
+            calendar::once_every( wait_refresh_rate ) ) {
+            ui_manager::redraw();
 
             // Avoid redrawing the main UI every time due to invalidation
 #ifdef TILES
